@@ -3,9 +3,7 @@ class CSSStyling {
 		if ((typeof chowsenStyle == "string" && chowsenStyle != "") ||
 			(typeof chowsenStyle == "object" && chowsenStyle != null) ||
 			chowsenStyle != undefined) {
-			this.providedStyle = chowsenStyle.replaceAll("\t","  ")
-																			 .replaceAll("  "," ")
-																			 .trim();
+			this.providedStyle = chowsenStyle.replaceAll("\t","  ").replaceAll("  "," ").trim();
 		}
 	}
 	parseStyle() {
