@@ -3,40 +3,42 @@ class CSSStyling {
 		if ((typeof chowsenStyle == "string" && chowsenStyle != "") ||
 			(typeof chowsenStyle == "object" && chowsenStyle != null) ||
 			chowsenStyle != undefined) {
-			this.providedStyle = chowsenStyle;
+			this.providedStyle = chowsenStyle.replaceAll("\t","  ")
+																			 .replaceAll("  "," ")
+																			 .trim();
 		}
 	}
 	parseStyle() {
 		this.listOfStyles = [];
 		if (typeof this.providedStyle == "string" && this.providedStyle != "") {
-			//Use an object using template below to save in the list Of Styles above
-			//each selector is a key, corresponds to value which directly uses selector_style index, which stores objects
-			//each such object has key for property, and value, this way, making changes to the Style object is easy
-			//It is then possible to easily update <style></style> element anywhere
-			//this.styleObject = { selector_s: {}, selector_style: [] };
-			//Parsing style, using  { as start parsing token and } as the end parsing token
 			let i = 0;
+			let style = {};
 			while(this.providedStyle.length > 0){
 				let startIndex = this.providedStyle.indexOf('{');
 				let selectorPart = this.providedStyle.slice(0, startIndex).trim();
 				let endIndex = this.providedStyle.indexOf('}');
 				let styleBody = this.providedStyle.slice(startIndex + 1, endIndex - 1);
 				let stylePrefs = styleBody.split(';');
-				let style = [];
-				let selector_s = { text_s:[], index: 0 };
-				let selector_sList = selectorPart.split(',');
 				
+				let selector_s = [];
+				let selector_sList = selectorPart.split(',');
 				for(let selectorS in selector_sList){
-						selector_s.text_s.push(selector_sList[selectorS].trim());
+						selector_s.push(selector_sList[selectorS].trim());
 				}
-				selector_s.index = i;
 				for(let stylePref in stylePrefs){
-					let prop_Val = stylePrefs[stylePref].split(':');
-					style.push({ prop:prop_Val[0], value:prop_Val[1] });
+					if(stylePrefs[stylePref] != " "){
+						let prop_Val = stylePrefs[stylePref].split(':');
+						prop_Val[0] = prop_Val[0].trim();
+						if(prop_Val.length == 2){
+							prop_Val[1] = prop_Val[1].trim();
+							style[prop_Val[0]] = prop_Val[1];
+						}
+						else if(prop_Val.length == 1 && prop_Val[0] != "") {
+							style['o'] = prop_Val[0];
+						}
+					}
 				}
-				let selectors_per_style = { styleSelectors: selector_s, selector_style: [] };
-				selectors_per_style.selector_style.push(style);
-				this.listOfStyles.push(selectors_per_style);
+				this.listOfStyles.push({ selector: selector_s, selector_style:style });
 				this.providedStyle = this.providedStyle.slice(endIndex + 1, this.providedStyle.length);
 				i++;
 			}
@@ -55,5 +57,4 @@ let testCSS = new CSSStyling(`@mixin transform($property) {
 																						.box {
 																							@include transform(rotate(30deg));
 																						}`);
-
 console.log(testCSS.parseStyle());
