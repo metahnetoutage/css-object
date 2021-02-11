@@ -6,7 +6,6 @@ class CSSStyling {
 			this.providedStyle = chowsenStyle.replaceAll("\t","  ").replaceAll("  "," ").trim();
 		}
 	}
-
 	parseStyle() {
 		this.listOfStyles = [];
 		if (typeof this.providedStyle == "string" && this.providedStyle != "") {
@@ -53,7 +52,6 @@ class CSSStyling {
 		}
 		return this.listOfStyles;
 	}
-
 	toString(){
 		let final = "";
 		let r = this.listOfStyles;
@@ -67,8 +65,13 @@ class CSSStyling {
 			final += '{';
 			for(let s in r[i].selector_style){
 				let style_s = r[i].selector_style[s];
-				if(typeof style_s == "string"){
-					final += `\n\t${ s }:${ r[i].selector_style[s] };\n\t`;
+				if(typeof style_s == "string" && s != "o"){
+					if(s != "o"){
+						final += `\n\t${ s }:${ r[i].selector_style[s] };\n\t`;
+					}
+					else if(s == "o"){
+						final += `\n\t${ r[i].selector_style[s] };\n\t`;
+					}
 				}
 				else if(Array.isArray(style_s)){
 					final += `\n\t${ s }:${ r[i].selector_style[s].join(', ') };\n\t`;
