@@ -65,7 +65,7 @@ class CSSStyling {
 			final += '{';
 			for(let s in r[i].selector_style){
 				let style_s = r[i].selector_style[s];
-				if(typeof style_s == "string" && s != "o"){
+				if(typeof style_s == "string"){
 					if(s != "o"){
 						final += `\n\t${ s }:${ r[i].selector_style[s] };\n\t`;
 					}
