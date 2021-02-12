@@ -9,45 +9,39 @@ class CSSStyling {
 	parseStyle() {
 		this.listOfStyles = [];
 		if (typeof this.providedStyle == "string" && this.providedStyle != "") {
-			let i = 0;
-			let style = {};
 			while(this.providedStyle.length > 0){
+				let style = {};
 				let startIndex = this.providedStyle.indexOf('{');
 				let selectorPart = this.providedStyle.slice(0, startIndex).trim();
 				let endIndex = this.providedStyle.indexOf('}');
-				let styleBody = this.providedStyle.slice(startIndex + 1, endIndex - 1);
+				let styleBody = this.providedStyle.slice(startIndex + 1, endIndex - 1).trim();
 				let stylePrefs = styleBody.split(';');
-				
-				let selector_s = [];
 				let selector_sList = selectorPart.split(',');
+				let selector_s = [];
 				for(let selectorS in selector_sList){
-						selector_s.push(selector_sList[selectorS].trim());
+					selector_s.push(selector_sList[selectorS].trim());
 				}
-				for(let stylePref in stylePrefs){
-					if(stylePrefs[stylePref] != " "){
+				for(let stylePref = 0; stylePref < stylePrefs.length; stylePref++){
+					stylePrefs[stylePref] = stylePrefs[stylePref].trim();
+					if(stylePrefs[stylePref] != ""){
 						let prop_Val = stylePrefs[stylePref].split(':');
+						let prop_s = "";
 						prop_Val[0] = prop_Val[0].trim();
 						if(prop_Val.length == 2){
 							prop_Val[1] = prop_Val[1].trim();
-							let prop_s = prop_Val[1].split(',');
-							if(prop_s.length == 1){
-								style[prop_Val[0]] = prop_s[0].trim();
-							}
-							else if(prop_s.length > 1){
-								for(let prop = 0; prop < prop_s.length; prop++){
-									prop_s[prop] = prop_s[prop].trim();
-								}
+							prop_s = prop_Val[1].split(',');
+							for(let prop = 0; prop < prop_s.length; prop++){
+								prop_s[prop] = prop_s[prop].trim();
 								style[prop_Val[0]] = prop_s;
 							}
 						}
-						else if(prop_Val.length == 1 && prop_Val[0] != "") {
+						else if(prop_Val.length == 1) {
 							style['o'] = prop_Val[0];
 						}
 					}
 				}
 				this.listOfStyles.push({ selector: selector_s, selector_style:style });
 				this.providedStyle = this.providedStyle.slice(endIndex + 1, this.providedStyle.length);
-				i++;
 			}
 		}
 		return this.listOfStyles;
@@ -55,6 +49,7 @@ class CSSStyling {
 	toString(){
 		let final = "";
 		let r = this.listOfStyles;
+		
 		for(let i = 0; i < r.length; i++){
 			if(r[i].selector.length == 1){
 				final += r[i].selector[0];
@@ -65,13 +60,14 @@ class CSSStyling {
 			final += '{';
 			for(let s in r[i].selector_style){
 				let style_s = r[i].selector_style[s];
-				if(typeof style_s == "string"){
+				if(typeof style_s == "string" && s != "o"){
 					if(s != "o"){
 						final += `\n\t${ s }:${ r[i].selector_style[s] };\n\t`;
 					}
 					else if(s == "o"){
 						final += `\n\t${ r[i].selector_style[s] };\n\t`;
 					}
+					console.log(r[i].selector_style[s]);
 				}
 				else if(Array.isArray(style_s)){
 					final += `\n\t${ s }:${ r[i].selector_style[s].join(', ') };\n\t`;
@@ -107,5 +103,5 @@ console.log(testCSS.toString());
 
 /*
   Output:
-  "body{ background:#f3f3f3; color:#252525; line-height:1.1; font-family:-apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, Ubuntu, roboto, noto, segoe ui, arial, sans-serif; padding:2rem; font-weight:900; } h1, h2, h3{ background:#f3f3f3; color:#252525; line-height:1.1; font-family:-apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, Ubuntu, roboto, noto, segoe ui, arial, sans-serif; padding:2rem; font-weight:900; } "
+   "body{ background:#f3f3f3; color:#252525; line-height:1.5; font-family:Georgia, serif; padding:2rem; } h1, h2, h3{ font-family:-apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, Ubuntu, roboto, noto, segoe ui, arial, sans-serif; line-height:1.1; font-weight:900; } "
 */
