@@ -67,7 +67,6 @@ class CSSStyling {
 					else if(s == "o"){
 						final += `\n\t${ r[i].selector_style[s] };\n\t`;
 					}
-					console.log(r[i].selector_style[s]);
 				}
 				else if(Array.isArray(style_s)){
 					final += `\n\t${ s }:${ r[i].selector_style[s].join(', ') };\n\t`;
@@ -78,30 +77,3 @@ class CSSStyling {
 		return final;
 	}
 }
-
-//Testing selector parsing
-
-let testCSS = new CSSStyling(`body {
-	background: #f3f3f3;
-	color: #252525;
-	line-height: 1.5;
-	font-family: Georgia, serif;
-	padding: 2rem;
-	}
-
-	h1,
-	h2,
-	h3 {
-	font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue,
-		helvetica, Ubuntu, roboto, noto, segoe ui, arial, sans-serif;
-	line-height: 1.1;
-	font-weight: 900;
-	}`);
-	
-testCSS.parseStyle();
-console.log(testCSS.toString());
-
-/*
-  Output:
-   "body{ background:#f3f3f3; color:#252525; line-height:1.5; font-family:Georgia, serif; padding:2rem; } h1, h2, h3{ font-family:-apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, Ubuntu, roboto, noto, segoe ui, arial, sans-serif; line-height:1.1; font-weight:900; } "
-*/
