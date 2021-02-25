@@ -6,6 +6,9 @@ class CSSStyling {
 			this.providedStyle = chowsenStyle.replaceAll("\t","  ").replaceAll("  "," ").trim();
 		}
 	}
+	/*
+	   Parses CSS string into a list of objects that can be dynamically edited
+	*/
 	parseStyle() {
 		this.listOfStyles = [];
 		if (typeof this.providedStyle == "string" && this.providedStyle != "") {
@@ -46,6 +49,22 @@ class CSSStyling {
 		}
 		return this.listOfStyles;
 	}
+
+	showIdentified(name){
+		if(typeof name === "string"){
+			for(let i in this.listOfStyles){
+				for(let j in i.selector){
+					if(j == name){
+						return i;
+					}
+				}
+			}
+		}
+	}
+
+	/*
+		Prints a professional string of CSS
+	*/
 	toString(){
 		let final = "";
 		let r = this.listOfStyles;
