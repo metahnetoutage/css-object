@@ -62,6 +62,23 @@ class CSSStyling {
 		}
 	}
 
+	updateSelector(name, obj){
+		if(typeof name === "string" && obj != null && typeof obj == "object"){
+			let message = "";
+			for(let i = 0; i < this.listOfStyles.length; i++){
+				let foundSelector = this.listOfStyles[i].selector.join(', ');
+				if(name == foundSelector){
+					this.listOfStyles[i] = obj;
+					message = `Successfully applied Styling to ${ foundSelector }`;
+				}
+			}
+			if(message == ""){
+				message = `Failed applying Styling, ${ name } could not be found!`;
+			}
+			console.log(message);
+		}
+	}
+
 	/*
 		Prints a professional string of CSS
 	*/
