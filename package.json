@@ -1,0 +1,26 @@
+{
+  "name": "css-object",
+  "version": "1.0.0",
+  "description": "allows editing css styles dynamically",
+  "main": "testing.js",
+  "type": "module",
+  "scripts": {
+    "test": "node testing.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/metahnetoutage/css-object.git"
+  },
+  "keywords": [
+    "css",
+    "object",
+    "dynamic",
+    "css"
+  ],
+  "author": "Dmitri Dimov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/metahnetoutage/css-object/issues"
+  },
+  "homepage": "https://github.com/metahnetoutage/css-object#readme"
+}
