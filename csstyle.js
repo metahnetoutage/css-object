@@ -201,11 +201,11 @@ class CSSStyling {
 						console.log(this.displayDifference(this.finalStyles[i].selector_style, objReceived).styleDiff);
 					}
 					this.finalStyles.splice(i, 1, { selector: [ name ], selector_style:objReceived[0].selector_style });
-					message = `Successfully applied Styling to ${ foundSelector }`;
+					message = `\nSuccessfully applied Styling to ${ foundSelector }\n`;
 				}
 			}
 			if(message == ""){
-				message = `Failed applying Styling, ${ name } could not be found!`;
+				message = `\nFailed applying Styling, ${ name } could not be found!\n`;
 			}
 			if(typeof showMessage == "boolean" && showMessage == true){
 				console.log(message);
@@ -235,11 +235,11 @@ class CSSStyling {
 					}
 					this.finalStyles[i].selector.splice(this.finalStyles[i].selector.indexOf(name), 1);
 					this.finalStyles.splice(i, 0, { selector: [ name ], selector_style:objReceived[0].selector_style });
-					message = `Successfully added ${ name } by applied Styling to ${ selector }`;
+					message = `\nSuccessfully added ${ name } by applied Styling to ${ selector }\n`;
 				}
 			}
 			if(message == ""){
-				message = `Failed applying Styling, ${ name } could not be found!`;
+				message = `\nFailed applying Styling, ${ name } could not be found!\n`;
 			}
 			if(typeof showMessage == "boolean" && showMessage == true){
 				console.log(message);
@@ -273,11 +273,132 @@ class CSSStyling {
 				let selector = this.finalStyles[i].selector.join(', ');
 				if(selector.includes(name) || selector == name){		
 					this.finalStyles[i].selector_style[objReceived[0]] = objReceived[1];
-					message = `Successfully updated property ${ objReceived[0] } for ${ name }`;
+					message = `\nSuccessfully updated property ${ objReceived[0] } for ${ name }\n`;
 				}
 			}
 			if(message == ""){
-				message = `Failed applying property ${ objReceived[0] } for ${ name }!`;
+				message = `\nFailed applying property ${ objReceived[0] } for ${ name }!\n`;
+			}
+			if(typeof showMessage == "boolean" && showMessage == true){
+				console.log(message);
+			}
+		}
+		return;
+	}
+
+	/**
+	 * 
+	 * @param {*} name name of selector or part of it
+	 * @param {*} propName string representing property to remove
+	 * @param {*} showMessage optionally lets hide the message, defaults to showing success message
+	 * @returns nothing is returned
+	 */
+	 removeSelectorRule(name, propName, showMessage = true){
+		if(typeof name === "string" && propName != null && typeof propName == "string" && this.finalStyles != undefined){
+			let message = "";
+			for(let i = 0; i < this.finalStyles.length; i++){
+				let selector = this.finalStyles[i].selector.join(', ');
+				if(selector.includes(name) || selector == name){
+					if(this.finalStyles[i].selector_style[propName] != undefined){		
+						delete this.finalStyles[i].selector_style[propName];
+					}
+					message = `\nSuccessfully removed property ${ propName } from ${ name }\n`;
+				}
+			}
+			if(message == ""){
+				message = `\nFailed to remove property ${ propName } from ${ name }!\n`;
+			}
+			if(typeof showMessage == "boolean" && showMessage == true){
+				console.log(message);
+			}
+		}
+		return;
+	}
+
+	/**
+	 * 
+	 * @param {*} name name of selector or part of it
+	 * @param {*} obj string representing property to add
+	 * @param {*} showMessage optionally lets hide the message, defaults to showing success message
+	 * @returns nothing is returned
+	 */
+	 addSelectorRule(name, obj, showMessage = true){
+		if(typeof name === "string" && obj != null && typeof obj == "string" && this.finalStyles != undefined){
+			let message = "";
+			let objReceived = this.JSONtoString(obj).slice(1,-1).split(';');
+			for(let i = 0; i < objReceived.length; i++){
+				if(objReceived[i] == '\n' || objReceived[i] == '\t' || objReceived[i] == '\r' || objReceived[i] == ''){
+					objReceived.splice(i,1);
+					i--;
+				}
+			}
+			if(objReceived.length == 1){
+				objReceived[0] = objReceived[0].replaceAll('\n','').replaceAll('\t','').replaceAll('\r','');
+				objReceived = objReceived[0].split(':');
+			}
+			for(let i = 0; i < this.finalStyles.length; i++){
+				let selector = this.finalStyles[i].selector.join(', ');
+				if(selector.includes(name) || selector == name){
+					if(this.finalStyles[i].selector_style[objReceived[0]] == undefined){		
+						this.finalStyles[i].selector_style[objReceived[0]] = objReceived[1];
+					}
+					message = `\nSuccessfully property property ${ objReceived[0] } for ${ name }\n`;
+				}
+			}
+			if(message == ""){
+				message = `\nFailed to add property ${ objReceived[0] } for ${ name }!\n`;
+			}
+			if(typeof showMessage == "boolean" && showMessage == true){
+				console.log(message);
+			}
+		}
+		return;
+	}
+
+	/**
+	 * @param {*} name name of selector object to add
+	 * @param {*} obj string representing selector data to add
+	 * @param {*} showMessage optionally lets hide the message, defaults to showing success message
+	 * @returns nothing is returned
+	 */
+	 addSelectorObject(name, obj, showMessage = true){
+		if(typeof name === "string" && obj != null && typeof obj == "string" && this.finalStyles != undefined){
+			let message = "";
+			let objReceived = this.parseStyle(`${ name } ${ this.JSONtoString(obj) }`);
+			for(let i = 0; i < this.finalStyles.length; i++){
+				let selector = this.finalStyles[i].selector.join(', ');
+				if(selector.includes(name) || selector == name){
+					message = `\nFailed to add selector object ${ name }!\n`;
+					return;
+				}
+			}
+			this.finalStyles.push(objReceived[0]);
+			message = `\nSuccessfully added selector object ${ name }\n`;
+			if(typeof showMessage == "boolean" && showMessage == true){
+				console.log(message);
+			}
+		}
+		return;
+	}
+
+	/**
+	 * 
+	 * @param {*} name name of selector object to remove
+	 * @param {*} showMessage optionally lets hide the message, defaults to showing success message
+	 * @returns nothing is returned
+	 */
+	 removeSelectorObject(name, showMessage = true){
+		if(typeof name === "string" && this.finalStyles != undefined){
+			let message = "";
+			for(let i = 0; i < this.finalStyles.length; i++){
+				let selector = this.finalStyles[i].selector.join(', ');
+				if(selector == name){		
+					this.finalStyles.splice(i,1);
+					message = `\nSuccessfully removed selector style for ${ name }\n`;
+				}
+			}
+			if(message == ""){
+				message = `\nFailed removing selector object ${ name }!\n`;
 			}
 			if(typeof showMessage == "boolean" && showMessage == true){
 				console.log(message);

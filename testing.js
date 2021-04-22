@@ -216,3 +216,29 @@ styling.updateSelectorRule('h3',JSON.stringify({
                                     }));
 
 console.log(styling.toString());
+
+styling.removeSelectorRule('h3', 'width');
+
+console.log(styling.toString());
+
+styling.addSelectorRule('h3', JSON.stringify({
+    'width':'200px'
+}));
+
+console.log(styling.toString());
+
+styling.removeSelectorObject('h3');
+
+console.log(styling.toString());
+
+styling.addSelectorObject('h3', JSON.stringify({
+    'position':'absolute',	
+    'height':'319px',	
+    'border-color':'transparent',	
+    'border-width':'1px',	
+    'border-style':'solid',	
+    'border-radius':'6px',	
+    'width':'200px'
+}));
+
+console.log(styling.toString());
