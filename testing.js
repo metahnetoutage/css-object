@@ -4,7 +4,23 @@ import { CSSStyling } from './csstyle.js';
     Testing or unit testing can happen below
 */
 
-let styling = new CSSStyling(`#content_settings {
+let styling = new CSSStyling(`
+                            #top {
+                                background-color: var(--bg, lightgray);
+                                height: 100%;
+                            }
+                            .note {
+                                color: var(--note-color, tomato);
+                                background-color: var(--note-bg-color, lightgray);
+                            }
+                            .yellow-theme {
+                                --note-color: black;
+                                --note-bg-color: khaki;
+                            }
+                            .purple-note-text {
+                                --note-color: rebeccapurple;
+                            }
+                            #content_settings {
                                 position: absolute;
                                 width:458px;
                                 height:400px;
@@ -174,15 +190,22 @@ let styling = new CSSStyling(`#content_settings {
                                 display:inline-block;
                             }`);
 
+console.log("\n\t---------------------------------------------------\n\t");
 
 console.log(styling.toString());
 
-console.log('\n---------------------------------------------------\n');
+console.log('\n\t---------------------------------------------------\n\t');
 
-console.log('show style');
+console.log('\n\tshow style\n\t');
+console.log(styling.showStyle('.options2'));
 console.log(styling.showStyle('.miniDataDiv_2, h3')); //works well
+console.log(styling.showStyle('#top')); //works well
+console.log(styling.showStyle('.note')); //works well
+console.log(styling.showStyle('.yellow-theme')); //works well
+console.log(styling.showStyle('.purple-note-text')); //works well
 
-console.log('updated .options2\n');
+console.log('\n\tupdated .options2\n\t');
+
 styling.updateSelector('.options2', JSON.stringify({
                                     'position': 'relative',
                                     'border-radius': '6px',
@@ -191,11 +214,15 @@ styling.updateSelector('.options2', JSON.stringify({
                                     'background-color': 'rgb(77, 75, 75)',
                                     'display':'inline-block'
                                     }));
+
+console.log('\n\t---------------------------------------------------\n\t');
+
 console.log(styling.toString());
 
-console.log('\n---------------------------------------------------\n');
+console.log('\n\t---------------------------------------------------\n\t');
 
-console.log('updated h3\n');
+console.log('\n\tupdated h3\n\t');
+
 styling.updatePartOfSelector('h3',JSON.stringify({
                                     'position': 'absolute',
                                     'width':'172px',
@@ -206,18 +233,25 @@ styling.updatePartOfSelector('h3',JSON.stringify({
                                     'border-radius':'6px'
                                     }));
 
+console.log('\n\t---------------------------------------------------\n\t');
+
 console.log(styling.toString());
 
-console.log('\n---------------------------------------------------\n');
+console.log('\n\t---------------------------------------------------\n\t');
 
-console.log('updated h3\n');
+console.log('\n\tupdated h3\n\t');
+
 styling.updateSelectorRule('h3',JSON.stringify({
                                     'width':'200px'
                                     }));
 
+console.log('\n\t---------------------------------------------------\n\t');
+
 console.log(styling.toString());
 
 styling.removeSelectorRule('h3', 'width');
+
+console.log('\n\t---------------------------------------------------\n\t');
 
 console.log(styling.toString());
 
@@ -225,9 +259,13 @@ styling.addSelectorRule('h3', JSON.stringify({
     'width':'200px'
 }));
 
+console.log('\n\t---------------------------------------------------\n\t');
+
 console.log(styling.toString());
 
 styling.removeSelectorObject('h3');
+
+console.log('\n\t---------------------------------------------------\n\t');
 
 console.log(styling.toString());
 
@@ -240,5 +278,7 @@ styling.addSelectorObject('h3', JSON.stringify({
     'border-radius':'6px',	
     'width':'200px'
 }));
+
+console.log('\n\t---------------------------------------------------\n\t');
 
 console.log(styling.toString());

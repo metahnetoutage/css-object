@@ -42,16 +42,24 @@ class CSSStyling {
 							prop_Val[0] = prop_Val[0].trim();
 							if(prop_Val.length == 2){
 								prop_Val[1] = prop_Val[1].trim();
-								if(prop_Val[1].slice(0,3).toLowerCase() != "rgb"){
+								if(prop_Val[1].slice(0,3).toLowerCase() == "rgb" ||
+								   prop_Val[1].slice(0,3).toLowerCase() == "var" ||
+								   prop_Val[1].slice(0,4).toLowerCase() == "rgba"){
+									prop_s = prop_Val[1];
+									style[prop_Val[0]] = [ prop_s ];
+								}
+								else {
 									prop_s = prop_Val[1].split(',');
+									if(prop_s == prop_Val[1]){
+										prop_s = prop_Val[1].split(' ');
+										if(prop_s == prop_Val[1]){
+											style[prop_Val[0]] = '-1';
+										}
+									}
 									for(let prop = 0; prop < prop_s.length; prop++){
 										prop_s[prop] = prop_s[prop].trim();
 										style[prop_Val[0]] = prop_s;
 									}
-								}
-								else {
-									prop_s = prop_Val[1];
-									style[prop_Val[0]] = [ prop_s ];
 								}
 							}
 							else if(prop_Val.length == 1) {
@@ -77,8 +85,9 @@ class CSSStyling {
 		let start = 0;
 		let result = "";
 		for(let i = 0; i < objToProps.length; i++){
-		 	if(objToProps[i] == ',' && (i - 1 > 0 && (objToProps[i - 1] == '%' || objToProps[i - 1] >= '0' && objToProps[i - 1] <= '9'))||
-			   (objToProps[i] >= '0' && objToProps[i] <= '9' && (i - 1 > 0 && objToProps[i - 1] == ','))){
+		 	if(objToProps[i] == ',' && (i - 1 > 0 && (objToProps[i - 1] == '%' || objToProps[i - 1] >= '0' && objToProps[i - 1] <= '9' ||
+			   objToProps[i - 1].toLowerCase() >= 'a' && objToProps[i - 1].toLowerCase() <= 'z'))||
+			   ((objToProps[i] >= '0' && objToProps[i] <= '9' || objToProps[i].toLowerCase() >= 'a' && objToProps[i].toLowerCase() <= 'z') && (i - 1 > 0 && objToProps[i - 1] == ','))){
 			}
 			else if(objToProps[i] == ',' || i == objToProps.length - 1){
 				if(start == 0){
@@ -342,7 +351,7 @@ class CSSStyling {
 					if(this.finalStyles[i].selector_style[objReceived[0]] == undefined){		
 						this.finalStyles[i].selector_style[objReceived[0]] = objReceived[1];
 					}
-					message = `\nSuccessfully property property ${ objReceived[0] } for ${ name }\n`;
+					message = `\nSuccessfully property ${ objReceived[0] } for ${ name }\n`;
 				}
 			}
 			if(message == ""){
@@ -394,7 +403,7 @@ class CSSStyling {
 				let selector = this.finalStyles[i].selector.join(', ');
 				if(selector == name){		
 					this.finalStyles.splice(i,1);
-					message = `\nSuccessfully removed selector style for ${ name }\n`;
+					message = `\nSuccessfully removed selector object for ${ name }\n`;
 				}
 			}
 			if(message == ""){
